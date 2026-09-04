@@ -1,0 +1,42 @@
+architectury {
+    common rootProject.enabled_platforms.split(',')
+}
+
+dependencies {
+    // We depend on Fabric Loader here to use the Fabric @Environment annotations,
+    // which get remapped to the correct annotations on each platform.
+    // Do NOT use other classes from Fabric Loader.
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+
+    modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
+    modApi("dev.ftb.mods:ftb-library:2101.1.4") { transitive false }
+    modApi("curse.maven:sdm-economy-1102542:5803157")
+    modApi "curse.maven:sdm-engine-core-964997:5968080"
+    modApi("curse.maven:sdm-ui-lib-1095061:5762237")
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url "https://maven.architectury.dev/"
+    }
+
+    maven {
+        url "https://maven.saps.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+            includeGroup "dev.ftb.mods"
+        }
+    }
+
+    maven {
+        url "https://maven.saps.dev/snapshots"
+        content {
+            includeGroup "dev.latvian.mods"
+            includeGroup "dev.ftb.mods"
+        }
+    }
+    maven {
+        url "https://cursemaven.com"
+    }
+}
