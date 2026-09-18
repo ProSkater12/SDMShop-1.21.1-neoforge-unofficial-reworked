@@ -7,8 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.network.chat.Component;
-import net.sixik.sdm_economy.api.CurrencyHelper;
-import net.sixik.sdm_economy.common.currency.AbstractCurrency;
+import net.sixik.sdmeconomy.economyData.CurrencyPlayerData;
 import net.sixk.sdmshop.SDMShop;
 
 import java.util.ArrayList;
@@ -51,8 +50,8 @@ public class PlayerBasket extends BaseScreen {
 
                 walletRenderasList.clear();
 
-                for (AbstractCurrency w : CurrencyHelper.getPlayerData(Minecraft.getInstance().player).currencies) {
-                    WalletRender  walletRender = new WalletRender(walletPanel,w, (float) w.moneys);
+                for (CurrencyPlayerData.PlayerCurrency w : ShopEconomy.clientCurrencies()) {
+                    WalletRender  walletRender = new WalletRender(walletPanel, w.currency, (float) w.balance);
 
                     walletPanel.add(walletRender);
 

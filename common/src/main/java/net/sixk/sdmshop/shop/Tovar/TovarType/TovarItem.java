@@ -10,7 +10,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.sixik.sdm_economy.api.CurrencyHelper;
+import net.sixk.sdmshop.shop.ShopEconomy;
 import net.sixik.sdmcore.impl.utils.serializer.SDMSerializerHelper;
 import net.sixik.sdmcore.impl.utils.serializer.data.IData;
 import net.sixik.sdmcore.impl.utils.serializer.data.KeyData;
@@ -39,9 +39,9 @@ public class TovarItem extends AbstractTovar {
     @Override
     public void buy(Player player, Tovar tovar, long count) {
 
-        long currency = CurrencyHelper.getMoney(player, tovar.currency);
+        long currency = ShopEconomy.getMoney(player, tovar.currency);
         if((tovar.limit < count && tovar.limit != -1) || currency < tovar.cost * count ) return;
-        CurrencyHelper.addMoney(player, tovar.currency,-(tovar.cost * count));
+        ShopEconomy.addMoney(player, tovar.currency,-(tovar.cost * count));
         for (int w = 0; w < count; w++) {
             ItemHandlerHelper.giveItemToPlayer(player, item.copy());;
         }
@@ -74,13 +74,13 @@ public class TovarItem extends AbstractTovar {
             if ((tovar.limit < count && tovar.limit != -1)) return;
 
             if (amount <= 0) return;
-            if(sellItem(player, amount, tag)) CurrencyHelper.addMoney(player, tovar.currency, tovar.cost * count);
+            if(sellItem(player, amount, tag)) ShopEconomy.addMoney(player, tovar.currency, tovar.cost * count);
             if (tovar.limit != -1) tovar.limit -= count;
         }
         else
         {
             if ((tovar.limit < count && tovar.limit != -1)) return;
-            CurrencyHelper.addMoney(player, tovar.currency, tovar.cost * count);
+            ShopEconomy.addMoney(player, tovar.currency, tovar.cost * count);
             sellItem(player, (int) (count * item.getCount()), item);
             if (tovar.limit != -1) tovar.limit -= count;
         }

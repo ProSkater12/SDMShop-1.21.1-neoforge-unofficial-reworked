@@ -3,6 +3,7 @@
   "sdm_shop.addtovar.additem" : "Add Item",
   "sdm_shop.addtovar.command" : "Command",
   "sdm_shop.currency.basic_money" : "SDMCoin",
+  "sdm_shop.currency.sdmcoin" : "SDMCoin",
   "sdm_shop.apply" : "Apply",
   "sdm_shop.cancel" : "Cancel",
   "sdm_shop.addtovar.error_1" : "Select item",
@@ -49,5 +50,10 @@
   "sdm_shop.shop_page.reset_tabs" : "Reset tabs",
   "sdm_shop.shop_page.ghost_text" : "Search...",
   "sdm_shop.tab_panel.new_tab" : "New tab",
-  "sdm_shop.tab_panel.new_tab_name" : "New tab name"
+  "sdm_shop.tab_panel.new_tab_name" : "New tab name",
+  "sdmshop.balance": "Balance",
+  "ftbquests.task.sdmshop.money": "SDM Shop Money",
+  "ftbquests.task.sdmshop.currency": "Currency",
+  "ftbquests.reward.sdmshop.money": "SDM Shop Money",
+  "ftbquests.reward.sdmshop.currency": "Currency"
 }

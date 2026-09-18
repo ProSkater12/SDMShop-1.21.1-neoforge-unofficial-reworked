@@ -7,9 +7,6 @@ import dev.ftb.mods.ftblibrary.ui.input.MouseButton;
 import dev.ftb.mods.ftblibrary.ui.misc.NordColors;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.sixik.sdm_economy.adv.PlayerMoneyData;
-import net.sixik.sdm_economy.api.CurrencyHelper;
-import net.sixik.sdm_economy.common.cap.MoneyData;
 
 import static dev.ftb.mods.ftblibrary.ui.misc.NordColors.*;
 
@@ -24,7 +21,6 @@ public class AddCurrencyPanel extends BaseScreen {
     public SimpleTextButton cancel;
     public TextBox currencyName;
     public TextBox currencySign;
-    public MoneyData r;
 
     @Override
     public boolean onInit() {
@@ -59,7 +55,6 @@ public class AddCurrencyPanel extends BaseScreen {
         add(error = new TextField(this).setText(""));
         add(currencyName = new TextBox(this));
         add(currencySign = new TextBox(this));
-        r = PlayerMoneyData.CLIENT.CLIENT_MONET;
 
         add(apply = new SimpleTextButton(this, Component.translatable("sdm_shop.apply"), Icon.empty()) {
 
@@ -93,7 +88,7 @@ public class AddCurrencyPanel extends BaseScreen {
                     return;
                 };
 
-                CurrencyHelper.registerCustomCurrency(currencyName.getText(),0,currencySign.getText());
+                ShopEconomy.createCurrency(currencyName.getText(), currencySign.getText());
                 try {
                     Thread.sleep(120);
                 } catch (InterruptedException e) {

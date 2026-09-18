@@ -5,20 +5,19 @@ import dev.ftb.mods.ftblibrary.icon.Icons;
 import dev.ftb.mods.ftblibrary.ui.*;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.sixik.sdm_economy.api.CurrencyHelper;
-import net.sixik.sdm_economy.common.currency.AbstractCurrency;
+import net.sixik.sdmeconomy.economy.Currency;
 import net.sixk.sdmshop.SDMShop;
 
 
 public class WalletRender extends Panel {
 
     Float balance;
-    AbstractCurrency currency;
+    Currency currency;
     SimpleButton delete;
     TextField currencyTxt;
     TextField balanceTxt;
 
-    public WalletRender(Panel panel, AbstractCurrency currency, Float balance) {
+    public WalletRender(Panel panel, Currency currency, Float balance) {
 
         super(panel);
         setSize(67,22);
@@ -42,7 +41,7 @@ public class WalletRender extends Panel {
         add(balanceTxt = new TextField(this));
         if(SDMShop.isEditMode()) {
             add(delete = new SimpleButton(this, Component.translatable("sdm_shop.delete"), Icons.REMOVE, ((simpleButton, mouseButton) -> {
-                CurrencyHelper.deleteCustomCurrency(currency.getID());
+                ShopEconomy.deleteCurrency(currency);
                 try {
                     Thread.sleep(150);
                 } catch (InterruptedException e) {
@@ -56,9 +55,9 @@ public class WalletRender extends Panel {
 
     @Override
     public void alignWidgets() {
-        String i = Component.translatable("sdm_shop.currency." + currency.getID()).getString();
-        if(i.equals("sdm_shop.currency." + currency.getID())) i = currency.getID();
-        currencyTxt.setText( i + " " + currency.specialSymbol);
+        String i = Component.translatable("sdm_shop.currency." + currency.getName()).getString();
+        if(i.equals("sdm_shop.currency." + currency.getName())) i = currency.getName();
+        currencyTxt.setText( i + " " + ShopEconomy.symbol(currency));
         currencyTxt.setPos(2,3);
         balanceTxt.setText(balance.toString());
         balanceTxt.setPos(2,currencyTxt.height + 5);

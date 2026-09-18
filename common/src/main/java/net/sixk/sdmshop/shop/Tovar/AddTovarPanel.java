@@ -18,10 +18,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
-import net.sixik.sdm_economy.adv.PlayerMoneyData;
-import net.sixik.sdm_economy.common.currency.AbstractCurrency;
+import net.sixik.sdmeconomy.economyData.CurrencyPlayerData;
 import net.sixk.sdmshop.mixin.TextFieldMixin;
 import net.sixk.sdmshop.shop.CheckBox;
+import net.sixk.sdmshop.shop.ShopEconomy;
 import net.sixk.sdmshop.shop.ShopPage;
 import net.sixk.sdmshop.shop.Tab.TovarTab;
 import net.sixk.sdmshop.shop.Tovar.TovarType.TovarCommand;
@@ -429,15 +429,15 @@ public class AddTovarPanel extends BaseScreen {
 
                             tesBL.clear();
 
-                            for (AbstractCurrency w : PlayerMoneyData.CLIENT.CLIENT_MONET.currencies) {
+                            for (CurrencyPlayerData.PlayerCurrency w : ShopEconomy.clientCurrencies()) {
 
-                                String i = Component.translatable("sdm_shop.currency." + w.getID()).getString();
-                                if(i.equals("sdm_shop.currency." + w.getID())) i = w.getID();
+                                String i = Component.translatable("sdm_shop.currency." + w.currency.getName()).getString();
+                                if(i.equals("sdm_shop.currency." + w.currency.getName())) i = w.currency.getName();
                                 test1 = new SimpleTextButton(this, Component.literal(i), Icon.empty()) {
                                     @Override
                                     public void onClicked(MouseButton mouseButton) {
 
-                                        currencyName = w.getID();
+                                        currencyName = w.currency.getName();
                                         AddTovarPanel gui = (AddTovarPanel) getGui();
                                         gui.refreshWidgets();
 

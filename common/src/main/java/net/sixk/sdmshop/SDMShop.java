@@ -4,14 +4,17 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.networking.NetworkManager;
+import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
-import net.minecraft.client.Minecraft;
+import net.sixk.sdmshop.compat.ftbquests.FTBIntegrationHelper;
+import net.sixk.sdmshop.config.ShopConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.LevelResource;
-import net.sixik.sdm_economy.api.ICustomData;
 import net.sixik.sdmcore.impl.utils.serializer.DataIO;
 import net.sixik.sdmcore.impl.utils.serializer.data.IData;
 import net.sixk.sdmshop.shop.ShopComands;
@@ -25,15 +28,28 @@ import net.sixk.sdmshop.shop.network.ModNetwork;
 import net.sixk.sdmshop.shop.network.server.SendEditModeS2C;
 import net.sixk.sdmshop.shop.network.server.SendShopDataS2C;
 
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class SDMShop {
 
     public static final String MODID = "sdmshop";
+    public static final Logger LOGGER = LoggerFactory.getLogger("SDMShop");
 
     private static boolean isSerialize;
+    private static final Set<UUID> SERVER_EDIT_MODE = ConcurrentHashMap.newKeySet();
+    private static volatile boolean CLIENT_EDIT_MODE = false;
 
     public static void init(){
 
         ModNetwork.init();
+
+        ShopConfig.init();
+
+        if (Platform.isModLoaded("ftbquests")) {
+            FTBIntegrationHelper.init();
+        }
 
         event();
 
@@ -58,6 +74,8 @@ public class SDMShop {
             IData w1 = DataIO.read(server.getWorldPath(LevelResource.ROOT).resolve("SDMShopData").resolve("SDMTovarTab.sdm").toString());
 
             if (w1 != null) TovarTab.SERVER.deserialize(w1.asKeyMap());
+
+            ShopConfig.ensureDefaultCurrency(server);
         });
 
         LifecycleEvent.SERVER_STOPPED.register((server) -> {
@@ -74,6 +92,8 @@ public class SDMShop {
         });
 
         PlayerEvent.PLAYER_JOIN.register((serverPlayer) -> {
+            ShopConfig.ensureDefaultCurrency(serverPlayer.getServer());
+
             IData w2 = DataIO.read(serverPlayer.getServer().getWorldPath(LevelResource.ROOT).resolve("SDMShopData").resolve("SDMTovarList.sdm").toString());
             if (w2 != null && !isSerialize) {
                 isSerialize = true;
@@ -104,26 +124,23 @@ public class SDMShop {
     }
 
     public static boolean isEditMode(Player player){
-        if(((ICustomData) player).sdm$getCustomData().contains("edit_mode"))
-            return ((ICustomData) player).sdm$getCustomData().getBoolean("edit_mode");
-        else {
-            ((ICustomData) player).sdm$getCustomData().putBoolean("edit_mode", false);
-            return false;
-        }
+        return player != null && SERVER_EDIT_MODE.contains(player.getUUID());
     }
 
     public static boolean isEditMode(){
-        if(((ICustomData) Minecraft.getInstance().player).sdm$getCustomData().contains("edit_mode"))
-            return ((ICustomData) Minecraft.getInstance().player).sdm$getCustomData().getBoolean("edit_mode");
-        else {
-            return false;
-        }
+        return CLIENT_EDIT_MODE;
+    }
 
-
+    public static void setClientEditMode(boolean value) {
+        CLIENT_EDIT_MODE = value;
     }
 
     public static void setEditMode(ServerPlayer player, boolean value){
-        ((ICustomData) player).sdm$getCustomData().putBoolean("edit_mode", value);
+        if (value) {
+            SERVER_EDIT_MODE.add(player.getUUID());
+        } else {
+            SERVER_EDIT_MODE.remove(player.getUUID());
+        }
 
         NetworkManager.sendToPlayer(player, new SendEditModeS2C(value));
     }

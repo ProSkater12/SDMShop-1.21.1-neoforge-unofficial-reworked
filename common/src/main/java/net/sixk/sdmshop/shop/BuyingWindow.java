@@ -11,8 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.sixik.sdm_economy.adv.PlayerMoneyData;
-import net.sixik.sdm_economy.common.currency.AbstractCurrency;
+import net.sixik.sdmeconomy.economyData.CurrencyPlayerData;
 import net.sixik.sdmuilibrary.client.utils.TextHelper;
 import net.sixk.sdmshop.mixin.TextFieldMixin;
 import net.sixk.sdmshop.shop.Tovar.Tovar;
@@ -29,7 +28,7 @@ import java.util.Iterator;
 public class BuyingWindow extends BaseScreen {
 
     private Tovar tovar;
-    private AbstractCurrency currency;
+    private CurrencyPlayerData.PlayerCurrency currency;
     private TextField title;
     private TextField cost;
     private TextField moneyTxt;
@@ -52,8 +51,9 @@ public class BuyingWindow extends BaseScreen {
     public BuyingWindow(Tovar tovar){
 
         this.tovar = tovar;
-        for (AbstractCurrency w1 : PlayerMoneyData.CLIENT.CLIENT_MONET.currencies) {
-            if(tovar.currency.equals(w1.getID())) currency = w1;
+        currency = ShopEconomy.clientCurrency(tovar.currency);
+        if (currency == null) {
+            currency = new CurrencyPlayerData.PlayerCurrency(ShopEconomy.defaultCurrency(), 0);
         }
         id = tovar.abstractTovar.getID();
         switch (id) {
@@ -154,9 +154,9 @@ public class BuyingWindow extends BaseScreen {
                     if (tovar.toSell){
                         if (Integer.valueOf(countTxt.getText()) > countItems / stackCount) countTxt.setText(String.valueOf(countItems / stackCount));
                     } else {
-                        if(Integer.valueOf(countTxt.getText()) > (int) (currency.moneys / tovar.cost)) countTxt.setText(String.valueOf((int) (currency.moneys / tovar.cost)));
+                        if(Integer.valueOf(countTxt.getText()) > (int) (currency.balance / tovar.cost)) countTxt.setText(String.valueOf((int) (currency.balance / tovar.cost)));
                     }
-                    if((int) (currency.moneys / tovar.cost) != 0  && !tovar.toSell)spawnButton();
+                    if((int) (currency.balance / tovar.cost) != 0  && !tovar.toSell)spawnButton();
                     if(tovar.toSell)spawnButton();
                 } else {
                     receipt.setText("");
@@ -260,16 +260,16 @@ public class BuyingWindow extends BaseScreen {
         if(titleScale < 0.99)title.setPos((int) ((width - 34 )/ 2 -Theme.DEFAULT.getStringWidth(titleText) / 2 + titleChange + 33) ,5);
         title.resize(Theme.DEFAULT);
 
-        cost.setPos( (width - 34 )/ 2 - Theme.DEFAULT.getStringWidth(currency.specialSymbol + " " + tovar.cost) / 2 + 32, 19);
-        cost.setText(currency.specialSymbol + " " + tovar.cost);
+        cost.setPos( (width - 34 )/ 2 - Theme.DEFAULT.getStringWidth(ShopEconomy.symbol(currency.currency) + " " + tovar.cost) / 2 + 32, 19);
+        cost.setText(ShopEconomy.symbol(currency.currency) + " " + tovar.cost);
 
         if(!tovar.toSell){
 
             moneyTxt.setText(Component.translatable("sdm_shop.buying_window.money"));
-            moneyNum.setText(String.valueOf(currency.moneys));
+            moneyNum.setText(String.valueOf((long) currency.balance));
 
             mayBuyTxt.setText(Component.translatable("sdm_shop.buying_window.may_buy"));
-            mayBuyNum.setText(String.valueOf((int) (currency.moneys / tovar.cost)));
+            mayBuyNum.setText(String.valueOf((int) (currency.balance / tovar.cost)));
             receiptTxt.setText(Component.translatable("sdm_shop.buying_window.receipt_1"));
             moneyTxt.setPos(7, 35);
             mayBuyTxt.setPos(7, 50);

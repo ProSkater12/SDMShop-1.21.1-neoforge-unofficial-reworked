@@ -1,13 +1,11 @@
 package net.sixk.sdmshop.shop.network.server;
 
 import dev.architectury.networking.NetworkManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.sixik.sdm_economy.api.ICustomData;
 import net.sixk.sdmshop.SDMShop;
 
 public class SendEditModeS2C implements CustomPacketPayload {
@@ -28,7 +26,7 @@ public class SendEditModeS2C implements CustomPacketPayload {
 
 
     public static void  handle(SendEditModeS2C message, NetworkManager.PacketContext context) {
-        ((ICustomData) Minecraft.getInstance().player).sdm$getCustomData().putBoolean("edit_mode", message.editMod);
+        SDMShop.setClientEditMode(message.editMod);
     }
 
 

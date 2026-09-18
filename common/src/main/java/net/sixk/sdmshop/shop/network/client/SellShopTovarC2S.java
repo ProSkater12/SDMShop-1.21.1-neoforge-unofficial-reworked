@@ -1,20 +1,14 @@
 package net.sixk.sdmshop.shop.network.client;
 
 import dev.architectury.networking.NetworkManager;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-
-import net.sixik.sdm_economy.api.CurrencyHelper;
 import net.sixk.sdmshop.SDMShop;
 import net.sixk.sdmshop.shop.Tab.TovarTab;
-import net.sixk.sdmshop.shop.Tovar.Tovar;
 import net.sixk.sdmshop.shop.Tovar.TovarList;
 import net.sixk.sdmshop.shop.network.server.SendShopDataS2C;
 
@@ -37,7 +31,6 @@ public class SellShopTovarC2S implements CustomPacketPayload {
             TovarList.SERVER.tovarList.get(message.index).abstractTovar.sell(context.getPlayer(),TovarList.SERVER.tovarList.get(message.index),message.count);
 
             NetworkManager.sendToPlayer((ServerPlayer) context.getPlayer(), new SendShopDataS2C(TovarList.SERVER.serialize(context.registryAccess()).asNBT(), TovarTab.SERVER.serialize().asNBT()));
-            NetworkManager.sendToServer(new UpdateServerDataC2S(new CompoundTag()));
         });
     }
 

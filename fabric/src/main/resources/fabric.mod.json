@@ -31,9 +31,10 @@
     "fabricloader": ">=0.16.9",
     "architectury": ">=13.0.8",
     "fabric-api": "*",
-    "ftblibrary": ">=2100.1.0"
+    "ftblibrary": ">=2100.1.0",
+    "sdmeconomy": "*"
   },
   "suggests": {
-    "another-mod": "*"
+    "ftbquests": "*"
   }
 }

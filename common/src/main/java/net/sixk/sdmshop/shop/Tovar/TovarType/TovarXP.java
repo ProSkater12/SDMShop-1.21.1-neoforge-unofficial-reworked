@@ -8,7 +8,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.sixik.sdm_economy.api.CurrencyHelper;
+import net.sixk.sdmshop.shop.ShopEconomy;
 import net.sixik.sdmcore.impl.utils.serializer.data.IData;
 import net.sixik.sdmcore.impl.utils.serializer.data.KeyData;
 import net.sixk.sdmshop.api.IConstructor;
@@ -29,14 +29,14 @@ public class TovarXP extends AbstractTovar {
     @Override
     public void buy(Player player, Tovar tovar, long count) {
 
-        long playerMoney = CurrencyHelper.getMoney(player, tovar.currency);
+        long playerMoney = ShopEconomy.getMoney(player, tovar.currency);
         long needMoney = tovar.cost * count;
 
         if ((tovar.limit < count && tovar.limit != -1)) return;
 
         if(isXPLVL){
             if (player instanceof ServerPlayer serverPlayer) {
-                playerMoney = CurrencyHelper.getMoney(player, tovar.currency);
+                playerMoney = ShopEconomy.getMoney(player, tovar.currency);
                 needMoney = tovar.cost * count;
 
                 serverPlayer.setExperienceLevels((int) (player.experienceLevel + (xpCount * count)));
@@ -51,7 +51,7 @@ public class TovarXP extends AbstractTovar {
             player.experienceProgress = (float) (experience - expForLevel) / (float) player.getXpNeededForNextLevel();
         }
 
-        CurrencyHelper.setMoney(player, tovar.currency, playerMoney - needMoney);
+        ShopEconomy.setMoney(player, tovar.currency, playerMoney - needMoney);
         if (tovar.limit != -1) tovar.limit -= count;
 
     }
@@ -75,7 +75,7 @@ public class TovarXP extends AbstractTovar {
             player.experienceProgress = (float) (experience - expForLevel) / (float) player.getXpNeededForNextLevel();
         }
 
-        CurrencyHelper.addMoney(player, tovar.currency, tovar.cost * count);
+        ShopEconomy.addMoney(player, tovar.currency, tovar.cost * count);
         if (tovar.limit != -1) tovar.limit -= count;
 
     }

@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
-import net.sixik.sdm_economy.api.CurrencyHelper;
+import net.sixk.sdmshop.shop.ShopEconomy;
 import net.sixik.sdmcore.impl.utils.serializer.data.KeyData;
 import net.sixk.sdmshop.api.IConstructor;
 import net.sixk.sdmshop.shop.Tovar.AbstractTovar;
@@ -38,7 +38,7 @@ public class TovarCommand extends AbstractTovar {
 
             try {
                 player.getServer().getCommands().performPrefixedCommand(source, command);
-                CurrencyHelper.setMoney(serverPlayer, tovar.currency,CurrencyHelper.getMoney(serverPlayer, tovar.currency) - tovar.cost * count);
+                ShopEconomy.setMoney(serverPlayer, tovar.currency, ShopEconomy.getMoney(serverPlayer, tovar.currency) - tovar.cost * count);
             }catch (Exception e) {
                 e.printStackTrace();
             }

@@ -9,9 +9,12 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
-    modApi("dev.ftb.mods:ftb-library:2101.1.4") { transitive false }
-    modApi("curse.maven:sdm-economy-1102542:5803157")
-    modApi "curse.maven:sdm-engine-core-964997:5968080"
+    // FTB Library 2101.x for MC 1.21.1 (Java 21). File 8574542 is a newer FTB Library
+    // compiled with Java 25 (class major 69) and breaks the 1.21.1 toolchain.
+    modApi("curse.maven:ftb-library-forge-404465:5893689")
+    modApi("curse.maven:ftb-quests-289412:8842729")
+    modApi("curse.maven:sdm-economy-1102542:6770945")
+    modApi("curse.maven:sdm-engine-core-964997:5968080")
     modApi("curse.maven:sdm-ui-lib-1095061:5762237")
 }
 

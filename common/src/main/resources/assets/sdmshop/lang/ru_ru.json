@@ -3,6 +3,7 @@
   "sdm_shop.addtovar.additem" : "Добавить Предмет",
   "sdm_shop.addtovar.command" : "Команда",
   "sdm_shop.apply" : "Ок",
+  "sdm_shop.currency.sdmcoin" : "SDMCoin",
   "sdm_shop.cancel" : "Отмена",
   "sdm_shop.addtovar.error_1" : "Выберите предмет",
   "sdm_shop.addtovar.error_2" : "Выберите вкладку",
@@ -48,5 +49,10 @@
   "sdm_shop.shop_page.reset_tabs" : "Сбросить вкладки",
   "sdm_shop.shop_page.ghost_text" : "Поиск...",
   "sdm_shop.tab_panel.new_tab" : "Новая вкладка",
-  "sdm_shop.tab_panel.new_tab_name" : "Новое имя вкладки"
+  "sdm_shop.tab_panel.new_tab_name" : "Новое имя вкладки",
+  "sdmshop.balance": "Баланс",
+  "ftbquests.task.sdmshop.money": "Валюта SDM Shop",
+  "ftbquests.task.sdmshop.currency": "Валюта",
+  "ftbquests.reward.sdmshop.money": "Валюта SDM Shop",
+  "ftbquests.reward.sdmshop.currency": "Валюта"
 }
