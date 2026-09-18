@@ -89,6 +89,29 @@ public final class ShopEconomy {
         EconomyAPI.syncPlayer(serverPlayer);
     }
 
+    public static long takeMoney(Player player, String id, long amount) {
+        if (!(player instanceof ServerPlayer serverPlayer) || CurrencyPlayerData.SERVER == null || amount <= 0L) {
+            return 0L;
+        }
+
+        var optional = CurrencyPlayerData.SERVER.getPlayerCurrency(serverPlayer, id);
+        if (optional.isEmpty()) {
+            return 0L;
+        }
+
+        CurrencyPlayerData.PlayerCurrency playerCurrency = (CurrencyPlayerData.PlayerCurrency) optional.get();
+        long have = (long) playerCurrency.balance;
+        long take = Math.min(have, amount);
+        if (take <= 0L) {
+            return 0L;
+        }
+
+        playerCurrency.balance = have - take;
+        CurrencyPlayerData.save(serverPlayer.server);
+        EconomyAPI.syncPlayer(serverPlayer);
+        return take;
+    }
+
     public static void addMoney(Player player, String id, long amount) {
         if (!(player instanceof ServerPlayer serverPlayer) || CurrencyPlayerData.SERVER == null) {
             return;

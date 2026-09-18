@@ -55,5 +55,7 @@
   "ftbquests.task.sdmshop.money": "SDM Shop Money",
   "ftbquests.task.sdmshop.currency": "Currency",
   "ftbquests.reward.sdmshop.money": "SDM Shop Money",
-  "ftbquests.reward.sdmshop.currency": "Currency"
+  "ftbquests.reward.sdmshop.currency": "Currency",
+  "sdm_shop.ftbquests.money.submit_title": "Submit %s?",
+  "sdm_shop.ftbquests.money.submit_info": "Pay %s of %s (you have %s)"
 }

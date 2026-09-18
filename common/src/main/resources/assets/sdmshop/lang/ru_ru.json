@@ -54,5 +54,7 @@
   "ftbquests.task.sdmshop.money": "Валюта SDM Shop",
   "ftbquests.task.sdmshop.currency": "Валюта",
   "ftbquests.reward.sdmshop.money": "Валюта SDM Shop",
-  "ftbquests.reward.sdmshop.currency": "Валюта"
+  "ftbquests.reward.sdmshop.currency": "Валюта",
+  "sdm_shop.ftbquests.money.submit_title": "Отдать %s?",
+  "sdm_shop.ftbquests.money.submit_info": "Списать %s из %s (у вас %s)"
 }

@@ -9,4 +9,4 @@ forge/build/
 forge/run/
 neoforge/.gradle/
 neoforge/build/
-/neoforge/build/
+/neoforge/build/libs/

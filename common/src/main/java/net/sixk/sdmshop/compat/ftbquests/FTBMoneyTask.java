@@ -1,6 +1,8 @@
 package net.sixk.sdmshop.compat.ftbquests;
 
 import dev.ftb.mods.ftblibrary.config.ConfigGroup;
+import dev.ftb.mods.ftblibrary.ui.Button;
+import dev.ftb.mods.ftblibrary.util.TooltipList;
 import dev.ftb.mods.ftbquests.quest.Quest;
 import dev.ftb.mods.ftbquests.quest.TeamData;
 import dev.ftb.mods.ftbquests.quest.task.ISingleLongValueTask;
@@ -8,6 +10,7 @@ import dev.ftb.mods.ftbquests.quest.task.Task;
 import dev.ftb.mods.ftbquests.quest.task.TaskType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -31,6 +34,10 @@ public class FTBMoneyTask extends Task implements ISingleLongValueTask {
         super(id, quest);
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
     @Override
     public TaskType getType() {
         return TYPE;
@@ -49,6 +56,11 @@ public class FTBMoneyTask extends Task implements ISingleLongValueTask {
     @Override
     public String formatProgress(TeamData teamData, long progress) {
         return FTBIntegrationHelper.moneyString(currency, progress);
+    }
+
+    @Override
+    public boolean hideProgressNumbers() {
+        return false;
     }
 
     @Override
@@ -106,8 +118,29 @@ public class FTBMoneyTask extends Task implements ISingleLongValueTask {
     }
 
     @Override
+    public boolean checkOnLogin() {
+        return false;
+    }
+
+    @Override
     public int autoSubmitOnPlayerTick() {
         return 0;
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public void addMouseOverText(TooltipList list, TeamData teamData) {
+        if (!teamData.isCompleted(this)) {
+            list.blankLine();
+            list.add(Component.translatable("ftbquests.task.click_to_submit").withStyle(ChatFormatting.YELLOW, ChatFormatting.UNDERLINE));
+        }
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public void onButtonClicked(Button button, boolean canClick) {
+        button.playClickSound();
+        new FTBMoneySubmitScreen(this, canClick).openGui();
     }
 
     @Override
@@ -116,12 +149,14 @@ public class FTBMoneyTask extends Task implements ISingleLongValueTask {
             return;
         }
 
-        long money = ShopEconomy.getMoney(player, currency);
-        long add = Math.min(money, value - teamData.getProgress(this));
+        long remaining = value - teamData.getProgress(this);
+        if (remaining <= 0L) {
+            return;
+        }
 
-        if (add > 0L) {
-            ShopEconomy.setMoney(player, currency, money - add);
-            teamData.addProgress(this, add);
+        long taken = ShopEconomy.takeMoney(player, currency, remaining);
+        if (taken > 0L) {
+            teamData.addProgress(this, taken);
         }
     }
 }
