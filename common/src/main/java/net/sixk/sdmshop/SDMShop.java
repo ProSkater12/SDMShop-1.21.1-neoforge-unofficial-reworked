@@ -9,6 +9,7 @@ import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
 import net.sixk.sdmshop.compat.ftbquests.FTBIntegrationHelper;
 import net.sixk.sdmshop.config.ShopConfig;
+import net.sixk.sdmshop.item.ModItems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.minecraft.server.MinecraftServer;
@@ -42,6 +43,8 @@ public class SDMShop {
     private static volatile boolean CLIENT_EDIT_MODE = false;
 
     public static void init(){
+
+        ModItems.register();
 
         ModNetwork.init();
 
